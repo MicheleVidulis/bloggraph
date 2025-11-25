@@ -2,6 +2,33 @@
 {{ $h2 := default true (.Get "h2") }}
 {{ $h3 := default true (.Get "h3") }}
 
+{{/*
+  This shortcode both enables and disables numbering.
+  The theme includes global CSS that applies numbering when containers
+  have classes like `count-figure` / `count-h2h3`. If the shortcode
+  requests disabling (h2=false / h3=false / figure=false) we need to
+  override that global CSS. We do so by emitting higher-specificity
+  rules that hide the ::before content with !important.
+*/}}
+
+{{/* Figure numbering */}}
+{{ if $figure }}
+<style>
+figcaption::before {
+  content: "Fig. " counter(figcounter) ".\00a0";
+  counter-increment: figcounter;
+}
+</style>
+{{ else }}
+<style>
+.count-figure figure figcaption::before,
+figcaption::before {
+  content: none !important;
+}
+</style>
+{{ end }}
+
+{{/* H2/H3 numbering: emit enabling or disabling styles depending on flags */}}
 {{ if or $h2 $h3 }}
 <style>
 h2 {
@@ -13,21 +40,19 @@ h3 {
 }
 </style>
 {{ end }}
- 
-{{ if $figure }}
-<style>
-figcaption::before {
-  content: "Fig. " counter(figcounter) ".\00a0";
-  counter-increment: figcounter;
-}
-</style>
-{{ end }}
 
 {{ if $h2 }}
 <style>
 h2::before {
   content: counter(seccounter) " \00a0\00a0";
   display: inline;
+}
+</style>
+{{ else }}
+<style>
+.count-h2h3 h2::before,
+h2::before {
+  content: none !important;
 }
 </style>
 {{ end }}
@@ -37,6 +62,13 @@ h2::before {
 h3::before {
   content: counter(seccounter) "." counter(subseccounter) " \00a0";
   display: inline;
+}
+</style>
+{{ else }}
+<style>
+.count-h2h3 h3::before,
+h3::before {
+  content: none !important;
 }
 </style>
 {{ end }}

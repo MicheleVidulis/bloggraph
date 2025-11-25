@@ -1,0 +1,39 @@
+{{/*
+Paired shortcode to render a profile area.
+Usage (paired):
+{{< profile src="images/profile.png" alt="Michele Vidulis" >}}
+Intro text here (this content becomes the profile-info)
+{{< /profile >}}
+
+Usage (single):
+{{< profile src="images/profile.png" >}}
+*/}}
+
+{{- $srcRaw := .Get "src" | default "images/profile.png" -}}
+{{- $alt := .Get "alt" | default $.Site.Title -}}
+
+{{- /* Decide how to render the image source: absolute (http/https) or site-local */ -}}
+{{- $isAbs := or (hasPrefix $srcRaw "http://") (hasPrefix $srcRaw "https://") -}}
+
+{{- if .Inner -}}
+<div class="profile">
+    <figure class="profile-photo">
+        {{- if $isAbs -}}
+            <img class="profile-avatar" src="{{ $srcRaw }}" alt="{{ $alt }}">
+        {{- else -}}
+            <img class="profile-avatar" src="{{ $srcRaw | relURL }}" alt="{{ $alt }}">
+        {{- end -}}
+    </figure>
+    <div class="profile-info">
+        {{ .Inner | markdownify }}
+    </div>
+</div>
+{{- else -}}
+<figure class="profile-photo">
+    {{- if $isAbs -}}
+        <img class="profile-avatar" src="{{ $srcRaw }}" alt="{{ $alt }}">
+    {{- else -}}
+        <img class="profile-avatar" src="{{ $srcRaw | relURL }}" alt="{{ $alt }}">
+    {{- end -}}
+</figure>
+{{- end -}}

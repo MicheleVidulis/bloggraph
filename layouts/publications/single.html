@@ -27,20 +27,37 @@
 
         <div class="author-info">
 
-          <a class="author-name" href="{{ with $url }} {{ $url }} {{ end }}" >{{ $firstname }} {{ $lastname }}
+          {{- /* Author name: link only if URL present, otherwise plain text */ -}}
+          {{- if $url -}}
+            <a class="author-name" href="{{ $url }}">{{ $firstname }} {{ $lastname }}
+          {{- else -}}
+            <span class="author-name">{{ $firstname }} {{ $lastname }}
+          {{- end -}}
+
           {{- range $noteIndex := (index $author "notes") -}}
             {{- $noteSymbol := (index (slice "*" "^") (sub $noteIndex 1)) -}}
             {{- $noteSymbol -}}
           {{- end -}}
-          </a>
+
+          {{- if $url -}}
+            </a>
+          {{- else -}}
+            </span>
+          {{- end -}}
 
           <div class="author-affliation">
-          {{ range $index, $affiliationIndex := (index $author "affiliations") }}
-            {{ $affiliationName := (index $affiliations (sub $affiliationIndex 1) "name") }}
-            {{ $affiliationURL := (index $affiliations (sub $affiliationIndex 1) "url") }}
+          {{- /* Affiliation names: link only when affiliation URL exists */ -}}
+          {{- range $index, $affiliationIndex := (index $author "affiliations") }}
+            {{- $affiliationName := (index $affiliations (sub $affiliationIndex 1) "name") -}}
+            {{- $affiliationURL := (index $affiliations (sub $affiliationIndex 1) "url") -}}
 
-            <a class="author-affiliation-name" href="{{ $affiliationURL }}">{{$affiliationName }}</a>{{ if lt $index (sub $numAffl 1) }}<span style="font-size: 90%;"> and </span>{{ end }}
-          {{ end }}
+            {{- if $affiliationURL -}}
+              <a class="author-affiliation-name" href="{{ $affiliationURL }}">{{ $affiliationName }}</a>{{ if lt $index (sub $numAffl 1) }}<span style="font-size: 90%;"> and </span>{{ end }}
+            {{- else -}}
+              <span class="author-affiliation-name">{{ $affiliationName }}</span>{{ if lt $index (sub $numAffl 1) }}<span style="font-size: 90%;"> and </span>{{ end }}
+            {{- end -}}
+
+          {{- end }}
           </div>
 
         </div>

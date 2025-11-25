@@ -330,20 +330,24 @@
     flex-wrap: wrap;
     justify-content: flex-start
     align-items: baseline
-    .author-name 
+    .author-name
       font-size: 115%;
       padding-right: 12px;
-      &:link
-        text-decoration: none!important;
+
+    /* Only anchors should show link decoration on hover. Non-link elements may still use the
+       .author-name class for typography, but we avoid applying :hover underline to them. */
+    a.author-name
+      text-decoration: none!important
       &:hover
-        text-decoration: underline!important;
+        text-decoration: underline!important
 
     .author-affiliation-name
       font-size: 90%;
-      &:link
-        text-decoration: none!important;
+
+    a.author-affiliation-name
+      text-decoration: none!important
       &:hover
-        text-decoration: underline!important;
+        text-decoration: underline!important
 
   .author-notes
     display: flex

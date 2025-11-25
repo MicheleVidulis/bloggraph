@@ -6,3 +6,72 @@
 
   p
     padding-bottom: 0.5rem
+
+
+/* Profile block: avatar (circular, cropped) + info side-by-side, avatar vertically centered */
+.profile
+  display: flex
+  /* default: vertically center items. change to flex-start to push them up, or flex-end to push them down */
+  align-items: center
+  gap: 1.5rem
+
+  /* helper modifiers:
+     - add class .align-top to .profile to align items to the top
+     - add class .align-bottom to align items to the bottom*/
+  &.align-top
+    align-items: flex-start
+
+  &.align-bottom
+    align-items: flex-end
+
+  /* Photo container: make it a square using aspect-ratio (with a padding-top fallback). The image fills the square and is cropped to a circle. */
+  .profile-photo
+    flex: 0 0 30%
+    width: 30%
+    max-width: 220px
+    overflow: hidden
+    border-radius: 50% /* ensure the container is circular */
+    background: #f3f3f3
+    aspect-ratio: 1/1
+    /* fallback for older browsers */
+    /* padding-top: 100% */
+
+    /* You can nudge the photo vertically with align-self or margin */
+    /* Example: align the photo to the top of the container */
+    /* align-self: flex-start */
+
+    /* Example: fine-grained offset */
+    margin-top: -1rem 
+
+    img.profile-avatar
+      display: block
+      width: 100%
+      height: 100%
+      object-fit: cover
+      border-radius: 50%
+
+  .profile-info
+    flex: 1
+    /* you can also nudge the info block independently */
+    /* e.g. to nudge info down slightly: margin-top: 0.25rem */
+
+/* Responsive tweaks */
+@media (max-width: 900px)
+  .profile
+    gap: 1rem
+    .profile-photo
+      flex-basis: 35%
+      width: 35%
+      max-width: 180px
+
+@media (max-width: 600px)
+  .profile
+    flex-direction: column
+    align-items: center
+    text-align: center
+    .profile-photo
+      width: 40%
+      flex-basis: 40%
+      padding-top: 100%
+    .profile-info
+      margin-top: 1rem
